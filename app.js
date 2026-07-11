@@ -933,6 +933,9 @@ function getApiKey() {
             new Sortable(col, {
                 group: 'kanban',
                 animation: 150,
+                delay: 150, // Mobile: wait 150ms before drag (allows scrolling)
+                delayOnTouchOnly: true, // Only apply delay on touch screens
+                fallbackOnBody: true, // Better z-index handling on mobile
                 ghostClass: 'sortable-ghost',
                 dragClass: 'sortable-drag',
                 onEnd: function (evt) {

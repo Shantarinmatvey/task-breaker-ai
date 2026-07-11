@@ -26,7 +26,7 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-dark);
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -841,15 +841,15 @@ input:focus, textarea:focus {
     /* Mobile Menu Button */
     .mobile-menu-btn {
         display: flex !important;
-        position: absolute;
+        position: fixed; /* fixed to hover over everything */
         top: 1rem;
         left: 1rem;
-        z-index: 100;
+        z-index: 99; /* slightly below overlay */
         background: var(--card-white);
         border: 1px solid #e4e4e7;
         border-radius: var(--radius-md);
-        width: 40px;
-        height: 40px;
+        width: 44px; /* bigger for touch */
+        height: 44px;
         align-items: center;
         justify-content: center;
         color: var(--text-dark);
@@ -900,31 +900,36 @@ input:focus, textarea:focus {
     /* Main Content Adjustments */
     .main-content {
         width: 100vw;
-        padding-top: 4rem; /* Space for hamburger button */
+        height: 100dvh;
     }
 
     .view-container {
-        padding: 0 1rem 1rem 1rem;
+        padding: 4rem 1rem 1rem 1rem; /* Space for hamburger button moved here so it scrolls */
     }
     
     #newProjectView {
-        padding: 1rem;
+        padding: 4rem 1rem 1rem 1rem;
     }
 
     .main-input-card {
-        padding: 1.5rem;
+        padding: 1.25rem; /* smaller padding for mobile */
+    }
+    
+    .bento-card {
+        padding: 1.25rem;
     }
     
     /* Kanban Board Mobile Scrolling */
     .kanban-board {
         gap: 1rem;
         padding-bottom: 1.5rem;
+        padding-right: 1.5rem; /* Ensure right margin when scrolling */
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
     }
 
     .kanban-column {
-        min-width: 280px;
+        min-width: 85vw; /* Almost full screen width for better readability */
         scroll-snap-align: center;
         flex: 0 0 auto;
     }
@@ -932,7 +937,8 @@ input:focus, textarea:focus {
     /* Modals for Mobile */
     .modal-content, .auth-card {
         width: 95%;
-        padding: 1.5rem;
+        max-height: 95dvh;
+        padding: 1.25rem;
     }
 
     .modal-header h3 {
