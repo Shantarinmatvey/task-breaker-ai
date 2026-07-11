@@ -827,3 +827,123 @@ input:focus, textarea:focus {
     text-align: center;
     margin-bottom: 2rem;
 }
+
+/* =========================================
+   Mobile Responsiveness
+   ========================================= */
+@media (max-width: 768px) {
+    .app-layout {
+        padding: 0;
+        gap: 0;
+        position: relative;
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+        display: flex !important;
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        z-index: 100;
+        background: var(--card-white);
+        border: 1px solid #e4e4e7;
+        border-radius: var(--radius-md);
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dark);
+        box-shadow: var(--shadow-sm);
+        cursor: pointer;
+    }
+
+    .mobile-menu-btn.hidden {
+        display: none !important;
+    }
+
+    /* Mobile Overlay */
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1000;
+        backdrop-filter: blur(2px);
+        transition: opacity 0.3s ease;
+    }
+
+    .mobile-overlay.hidden {
+        display: none;
+        opacity: 0;
+    }
+
+    /* Sidebar Mobile Behavior */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 280px;
+        height: 100vh;
+        z-index: 1001;
+        transition: left 0.3s ease;
+        border-radius: 0;
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        border: none;
+    }
+
+    .sidebar.mobile-open {
+        left: 0;
+    }
+    
+    /* Main Content Adjustments */
+    .main-content {
+        width: 100vw;
+        padding-top: 4rem; /* Space for hamburger button */
+    }
+
+    .view-container {
+        padding: 0 1rem 1rem 1rem;
+    }
+    
+    #newProjectView {
+        padding: 1rem;
+    }
+
+    .main-input-card {
+        padding: 1.5rem;
+    }
+    
+    /* Kanban Board Mobile Scrolling */
+    .kanban-board {
+        gap: 1rem;
+        padding-bottom: 1.5rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .kanban-column {
+        min-width: 280px;
+        scroll-snap-align: center;
+        flex: 0 0 auto;
+    }
+
+    /* Modals for Mobile */
+    .modal-content, .auth-card {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .modal-header h3 {
+        font-size: 1.25rem;
+    }
+    
+    /* Project header wrapping */
+    .project-header-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}
+

@@ -34,6 +34,9 @@ function getApiKey() {
     }
 
     // DOM Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+    const sidebar = document.querySelector('.sidebar');
     const newProjectBtn = document.getElementById('newProjectBtn');
     const projectsList = document.getElementById('projectsList');
     const clearAllBtn = document.getElementById('clearAllBtn');
@@ -163,8 +166,38 @@ function getApiKey() {
             }
         });
     }
+        // Load initial state
+        loadState();
+        
+        // Mobile Sidebar Logic
+        if (mobileMenuBtn && mobileSidebarOverlay && sidebar) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.add('mobile-open');
+                mobileSidebarOverlay.classList.remove('hidden');
+            });
+            
+            mobileSidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('mobile-open');
+                mobileSidebarOverlay.classList.add('hidden');
+            });
+            
+            // Also close sidebar if a project is clicked on mobile
+            projectsList.addEventListener('click', (e) => {
+                if (e.target.closest('li') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-open');
+                    mobileSidebarOverlay.classList.add('hidden');
+                }
+            });
+        }
+    }
 
-    newProjectBtn.addEventListener('click', showNewProjectView);
+    newProjectBtn.addEventListener('click', () => {
+        showNewProjectView();
+        if (window.innerWidth <= 768 && sidebar) {
+            sidebar.classList.remove('mobile-open');
+            if (mobileSidebarOverlay) mobileSidebarOverlay.classList.add('hidden');
+        }
+    });
     breakDownBtn.addEventListener('click', handleCreateProject);
     closeTaskModalBtn.addEventListener('click', () => taskModal.classList.add('hidden'));
     closeContextModalBtn.addEventListener('click', () => contextModal.classList.add('hidden'));
