@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Task Breaker v2</title>
+    <link rel="stylesheet" href="styles.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Mammoth.js for DOCX reading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <!-- Sortable.js for Kanban drag-and-drop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+</head>
+<body>
+    <!-- Initial Splash Screen -->
+    <div id="globalSplash" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999999;">
+        <div class="loader"></div>
+        <h3 style="color: var(--text-dark); margin-top: 1.5rem;">Загрузка приложения...</h3>
+    </div>
+
+    <!-- Auth Container -->
+    <div id="authContainer" class="auth-wrapper hidden">
+        <div class="bento-card card-white auth-card">
+            <div class="auth-header">
+                <i class="fa-solid fa-layer-group logo-icon" style="font-size: 2rem; color: var(--accent-purple); margin-bottom: 1rem;"></i>
+                <h2 id="authTitle" style="margin-bottom: 0.5rem; color: var(--text-dark);">Вход в аккаунт</h2>
+                <p id="authSubtitle" class="subtitle">Добро пожаловать обратно</p>
+            </div>
+            
+            <form id="authForm" onsubmit="event.preventDefault();">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="authEmail" class="text-input" placeholder="Введите ваш email" required style="color: var(--text-dark); border: 1px solid #d4d4d8; background: transparent;">
+                </div>
+                <div class="input-group">
+                    <label>Пароль</label>
+                    <div style="position: relative;">
+                        <input type="password" id="authPassword" class="text-input" placeholder="Введите пароль" required style="color: var(--text-dark); border: 1px solid #d4d4d8; background: transparent; padding-right: 2.5rem; width: 100%; box-sizing: border-box;">
+                        <button type="button" id="togglePasswordBtn" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted-dark); cursor: pointer; padding: 0;">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" id="authSubmitBtn" class="primary-btn accent-purple" style="width: 100%; margin-top: 1rem; justify-content: center;">
+                    Войти
+                </button>
+            </form>
+            
+            <div class="auth-footer" style="margin-top: 1.5rem; text-align: center; color: var(--text-muted-dark); font-size: 0.9rem;">
+                <span id="authToggleText">Нет аккаунта?</span>
+                <a href="#" id="authToggleBtn" style="color: var(--accent-purple); text-decoration: none; font-weight: 500; margin-left: 0.5rem;">Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div id="appContainer" class="app-layout hidden">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar bento-card card-white">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-layer-group logo-icon"></i>
+                <h2>Task Breaker</h2>
+            </div>
+            
+            <button id="newProjectBtn" class="primary-btn accent-purple small-btn">
+                <i class="fa-solid fa-plus"></i> Создать проект
+            </button>
+
+            <div class="projects-list-container">
+                <h3 class="section-title">Мои проекты</h3>
+                <ul id="projectsList" class="projects-list">
+                    <!-- Project items will be injected here -->
+                </ul>
+            </div>
+            <div class="sidebar-footer" style="margin-top: auto; padding-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <button id="openApiModalBtn" class="primary-btn card-dark small-btn">
+                    <i class="fa-solid fa-key"></i> Настройки API
+                </button>
+                <button id="openAccountModalBtn" class="text-btn" style="justify-content: center; width: 100%; padding: 0.5rem; color: var(--text-muted-dark);">
+                    <i class="fa-solid fa-user"></i> Аккаунт
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- View 1: New Project Form -->
+            <div id="newProjectView" class="view-container">
+                <section class="bento-card card-dark main-input-card">
+                    <h2>Новая задача</h2>
+                    <p class="subtitle">Опишите цель, и ИИ создаст Канбан-доску с пошаговым планом и оценкой времени.</p>
+                    
+                    <div class="input-group">
+                        <label>Название проекта</label>
+                        <input type="text" id="projectTitleInput" maxlength="35" placeholder="Короткое название (например, Запуск сайта)">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Главная задача</label>
+                        <textarea id="taskInput" rows="2" placeholder="Что конкретно нужно сделать?"></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Ссылки на материалы (необязательно)</label>
+                        <input type="text" id="linkInput" placeholder="https://..." class="text-input">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Прикрепленные файлы (до 5 шт.)</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="fileInput" accept=".pdf,.docx,.txt,image/*" multiple>
+                            <div class="file-upload-btn">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <span id="fileNameDisplay">Нажмите, чтобы добавить файлы</span>
+                            </div>
+                        </div>
+                        <div id="newProjectFilesContainer" class="file-badge-container" style="margin-top: 0.5rem;"></div>
+                    </div>
+
+                    <button id="breakDownBtn" class="primary-btn accent-green">
+                        <span>Разбить на задачи</span>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </button>
+                </section>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingView" class="view-container hidden">
+                <section class="bento-card card-white loader-card">
+                    <div class="spinner"></div>
+                    <p>ИИ анализирует и планирует...</p>
+                </section>
+            </div>
+
+            <!-- View 2: Kanban Board -->
+            <div id="kanbanView" class="view-container kanban-view hidden">
+                <header class="project-header">
+                    <div class="project-header-info">
+                        <h2 id="currentProjectTitle">Название проекта</h2>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button id="projectContextBtn" class="context-pill-btn">
+                                <i class="fa-regular fa-folder-open"></i> Материалы задачи
+                            </button>
+                            <button id="openManualTaskBtn" class="context-pill-btn" style="background: var(--card-mint); color: var(--text-dark);">
+                                <i class="fa-solid fa-plus"></i> Добавить задачу
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="project-stats-widget">
+                        <svg width="100" height="100" viewBox="0 0 100 100" class="circular-chart">
+                            <!-- Background circles -->
+                            <circle class="circle-bg" cx="50" cy="50" r="40" />
+                            <circle class="circle-bg" cx="50" cy="50" r="30" />
+                            <circle class="circle-bg" cx="50" cy="50" r="20" />
+                            
+                            <!-- Progress circles -->
+                            <circle class="circle-todo" id="circleTodo" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+                            <circle class="circle-inprogress" id="circleInProgress" cx="50" cy="50" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5" />
+                            <circle class="circle-done" id="circleDone" cx="50" cy="50" r="20" stroke-dasharray="125.6" stroke-dashoffset="125.6" />
+                        </svg>
+                        <div class="stats-legend">
+                            <div class="legend-item"><span class="dot dot-todo"></span> К выполнению (<span id="statTextTodo">0</span>)</div>
+                            <div class="legend-item"><span class="dot dot-inprogress"></span> В процессе (<span id="statTextInProgress">0</span>)</div>
+                            <div class="legend-item"><span class="dot dot-done"></span> Готово (<span id="statTextDone">0</span>)</div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="kanban-board">
+                    <!-- Column: To Do -->
+                    <div class="kanban-column">
+                        <div class="column-header">
+                            <h3><i class="fa-regular fa-circle"></i> Сделать</h3>
+                            <span class="count" id="count-todo">0</span>
+                        </div>
+                        <div class="column-body" id="col-todo" data-status="todo">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+
+                    <!-- Column: In Progress -->
+                    <div class="kanban-column">
+                        <div class="column-header">
+                            <h3><i class="fa-solid fa-spinner"></i> В процессе</h3>
+                            <span class="count" id="count-in-progress">0</span>
+                        </div>
+                        <div class="column-body" id="col-in-progress" data-status="in-progress">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+
+                    <!-- Column: Done -->
+                    <div class="kanban-column">
+                        <div class="column-header">
+                            <h3><i class="fa-solid fa-check-circle"></i> Готово</h3>
+                            <span class="count" id="count-done">0</span>
+                        </div>
+                        <div class="column-body" id="col-done" data-status="done">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Task Expand Modal -->
+    <div id="taskModal" class="modal hidden">
+        <div id="taskModalContainer" class="modal-content bento-card card-white task-modal-content">
+            <div class="modal-header">
+                <h2 id="modalTaskTitle">Task Title</h2>
+                <span class="task-time" id="modalTaskTime"><i class="fa-regular fa-clock"></i> 0 мин</span>
+                <button id="closeTaskModalBtn" class="icon-btn-circle small"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalSubtasks" class="subtasks-container-large"></div>
+                
+                <div class="modal-footer" style="margin-top: 2rem;">
+                    <button id="modalBreakDownBtn" class="primary-btn accent-green">
+                        <i class="fa-solid fa-list-check"></i> Раздробить задачу
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modals -->
+    <!-- Create Project Modal -->
+    <div id="contextModal" class="modal hidden">
+        <div class="modal-content bento-card card-dark task-modal-content">
+            <div class="modal-header">
+                <h2>Материалы задачи</h2>
+                <button id="closeContextModalBtn" class="icon-btn-circle small"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="context-group">
+                    <label class="label-muted">Главная задача:</label>
+                    <p id="contextModalGoal" class="context-text"></p>
+                </div>
+                <div class="context-group">
+                    <label class="label-muted">Ссылки:</label>
+                    <p id="contextModalLinks" class="context-text"></p>
+                </div>
+                <div class="context-group">
+                    <label class="label-muted">Прикрепленные файлы:</label>
+                    <div class="file-badge-container" id="contextModalFiles">
+                        <!-- File badges will go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Modal -->
+    <div id="accountModal" class="modal hidden">
+        <div class="modal-content bento-card card-dark task-modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header" style="justify-content: space-between;">
+                <h2>Аккаунт</h2>
+                <button id="closeAccountModalBtn" class="icon-btn-circle small"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="margin: 2rem 0;">
+                <i class="fa-solid fa-circle-user" style="font-size: 4rem; color: var(--card-mint); margin-bottom: 1rem;"></i>
+                <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 0.25rem; font-weight: 500;">Вы вошли как:</p>
+                <p id="accountEmailDisplay" style="color: var(--text-light); font-size: 1.2rem; font-weight: 500; word-break: break-all;"></p>
+            </div>
+            <button id="logoutBtn" class="primary-btn danger" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти из аккаунта
+            </button>
+        </div>
+    </div>
+
+    <!-- API Modal -->
+    <div id="apiModal" class="modal hidden">
+        <div class="modal-content bento-card card-dark task-modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>API Ключ</h2>
+                <button id="closeApiModalBtn" class="icon-btn-circle small"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="task-desc" style="margin-bottom: 1.5rem; color: var(--text-light);">
+                    Для работы приложения необходим API ключ Google Gemini.<br><br>
+                    Вы можете получить его бесплатно в 
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--card-mint); text-decoration: underline;">Google AI Studio</a>. 
+                    Нажмите кнопку "Create API key", выберите проект (или создайте новый) и скопируйте ключ сюда.
+                </p>
+                <div class="input-group">
+                    <label>Gemini API Key</label>
+                    <input type="password" id="apiInput" autocomplete="new-password" placeholder="Введите ваш API ключ..." class="text-input" style="background: rgba(255,255,255,0.1); color: var(--text-light); border-color: rgba(255,255,255,0.2);">
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 0.5rem;">Ключ надежно сохраняется только в вашем аккаунте.</p>
+                </div>
+                <div class="modal-footer" style="margin-top: 2rem;">
+                    <button id="saveApiBtn" class="primary-btn accent-green">
+                        <i class="fa-solid fa-check"></i> Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Task Modal -->
+    <div id="manualTaskModal" class="modal hidden">
+        <div class="modal-content bento-card card-white task-modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Создать задачу</h2>
+                <button id="closeManualTaskBtn" class="icon-btn-circle small"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label style="color: var(--text-dark); font-weight: 600;">Название задачи</label>
+                    <input type="text" id="manualTaskTitle" class="text-input" placeholder="Например: Провести тестирование" style="color: var(--text-dark); border: 1px solid #d4d4d8; background: transparent;">
+                </div>
+                <div class="input-group">
+                    <label style="color: var(--text-dark); font-weight: 600;">Оценка времени</label>
+                    <select id="manualTaskTime" class="text-input" style="color: var(--text-dark); border: 1px solid #d4d4d8; background: transparent; cursor: pointer;">
+                        <option value="15 мин">15 мин</option>
+                        <option value="30 мин">30 мин</option>
+                        <option value="1 час" selected>1 час</option>
+                        <option value="2 часа">2 часа</option>
+                        <option value="4 часа">4 часа</option>
+                        <option value="1 день">1 день</option>
+                        <option value="2 дня">2 дня</option>
+                        <option value="Неделя">Неделя</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label style="color: var(--text-dark); font-weight: 600;">Подзадачи (шаги)</label>
+                    <div id="manualSubtasksListContainer" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem; max-height: 200px; overflow-y: auto;">
+                        <!-- JS will inject subtasks here -->
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="newSubtaskInput" class="text-input" placeholder="Опишите шаг и нажмите Enter" style="color: var(--text-dark); border: 1px solid #d4d4d8; background: transparent; flex-grow: 1;">
+                        <button id="addManualSubtaskBtn" class="primary-btn card-dark small-btn" style="width: auto; padding: 0.75rem 1.25rem;" type="button"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 2rem;">
+                    <button id="saveManualTaskBtn" class="primary-btn accent-purple">
+                        <i class="fa-solid fa-check"></i> Создать задачу
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rename Project Modal -->
+    <div id="renameProjectModal" class="modal-overlay hidden">
+        <div class="modal-content bento-card card-white" style="max-width: 400px; padding: 2rem;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; color: var(--text-dark);">Переименовать проект</h3>
+                <button id="closeRenameModalBtn" class="icon-btn-circle small" style="color: var(--text-muted-dark);"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label style="color: var(--text-dark); font-weight: 600;">Название проекта</label>
+                    <input type="text" id="renameProjectInput" class="text-input" style="color: var(--text-dark); border: 1px solid #d4d4d8; background: transparent;">
+                </div>
+                <div class="modal-footer" style="margin-top: 2rem;">
+                    <button id="saveRenameModalBtn" class="primary-btn accent-purple">
+                        <i class="fa-solid fa-check"></i> Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+    <script src="auth.js?v=6"></script>
+    <script src="app.js?v=7"></script>
+</body>
+</html>
