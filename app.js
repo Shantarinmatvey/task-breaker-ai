@@ -166,29 +166,26 @@ function getApiKey() {
             }
         });
     }
-        // Load initial state
-        loadState();
+
+    // Mobile Sidebar Logic
+    if (mobileMenuBtn && mobileSidebarOverlay && sidebar) {
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.add('mobile-open');
+            mobileSidebarOverlay.classList.remove('hidden');
+        });
         
-        // Mobile Sidebar Logic
-        if (mobileMenuBtn && mobileSidebarOverlay && sidebar) {
-            mobileMenuBtn.addEventListener('click', () => {
-                sidebar.classList.add('mobile-open');
-                mobileSidebarOverlay.classList.remove('hidden');
-            });
-            
-            mobileSidebarOverlay.addEventListener('click', () => {
+        mobileSidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('mobile-open');
+            mobileSidebarOverlay.classList.add('hidden');
+        });
+        
+        // Also close sidebar if a project is clicked on mobile
+        projectsList.addEventListener('click', (e) => {
+            if (e.target.closest('li') && window.innerWidth <= 768) {
                 sidebar.classList.remove('mobile-open');
                 mobileSidebarOverlay.classList.add('hidden');
-            });
-            
-            // Also close sidebar if a project is clicked on mobile
-            projectsList.addEventListener('click', (e) => {
-                if (e.target.closest('li') && window.innerWidth <= 768) {
-                    sidebar.classList.remove('mobile-open');
-                    mobileSidebarOverlay.classList.add('hidden');
-                }
-            });
-        }
+            }
+        });
     }
 
     newProjectBtn.addEventListener('click', () => {
