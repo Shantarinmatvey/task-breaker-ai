@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Task Breaker</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%238b5cf6' d='M256 0l256 128-256 128L0 128 256 0zm0 304L0 176l256 128 256-128-256 128zm0 128L0 304l256 128 256-128-256 128z'/></svg>" type="image/svg+xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect x='80' y='80' width='150' height='350' rx='10' fill='%238b5cf6'/><rect x='250' y='150' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='350' y='150' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='250' y='250' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='350' y='250' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='250' y='350' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='350' y='350' width='80' height='80' rx='10' fill='%238b5cf6'/></svg>" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,8 +24,16 @@
     <div id="authContainer" class="auth-wrapper hidden">
         <div class="bento-card card-white auth-card">
             <div class="auth-header">
-                <i class="fa-solid fa-layer-group logo-icon" style="font-size: 2rem; color: var(--accent-purple); margin-bottom: 1rem;"></i>
-                <h2 id="authTitle" style="margin-bottom: 0.5rem; color: var(--text-dark);">Вход в аккаунт</h2>
+                <svg class="logo-icon" style="font-size: 2.5rem; color: var(--accent-purple); margin-bottom: 1rem; height: 1em; width: 1em; fill: currentColor;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <rect x="80" y="80" width="150" height="350" rx="10"/>
+                    <rect x="250" y="150" width="80" height="80" rx="10"/>
+                    <rect x="350" y="150" width="80" height="80" rx="10"/>
+                    <rect x="250" y="250" width="80" height="80" rx="10"/>
+                    <rect x="350" y="250" width="80" height="80" rx="10"/>
+                    <rect x="250" y="350" width="80" height="80" rx="10"/>
+                    <rect x="350" y="350" width="80" height="80" rx="10"/>
+                </svg>
+                <h2 id="authTitle" style="margin-bottom: 0.5rem; color: var(--text-dark);">Вход в систему</h2>
                 <p id="authSubtitle" class="subtitle">Добро пожаловать обратно</p>
             </div>
             
@@ -70,7 +78,15 @@
         <!-- Sidebar -->
         <aside class="sidebar bento-card card-white">
             <div class="sidebar-header">
-                <i class="fa-solid fa-layer-group logo-icon"></i>
+                <svg class="logo-icon" style="height: 1em; width: 1em; fill: currentColor;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <rect x="80" y="80" width="150" height="350" rx="10"/>
+                    <rect x="250" y="150" width="80" height="80" rx="10"/>
+                    <rect x="350" y="150" width="80" height="80" rx="10"/>
+                    <rect x="250" y="250" width="80" height="80" rx="10"/>
+                    <rect x="350" y="250" width="80" height="80" rx="10"/>
+                    <rect x="250" y="350" width="80" height="80" rx="10"/>
+                    <rect x="350" y="350" width="80" height="80" rx="10"/>
+                </svg>
                 <h2>Task Breaker</h2>
             </div>
             
