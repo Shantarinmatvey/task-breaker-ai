@@ -63,7 +63,7 @@ export function renderKanban() {
             subtasksHTML = '<div class="subtasks-list">';
             task.subtasks.forEach((st, sti) => {
                 subtasksHTML += `
-                    <label class="subtask-item ${st.done ? 'done' : ''}">
+                    <label class="subtask-item ${st.done ? 'done' : ''}" title="${st.description || ''}">
                         <input type="checkbox" ${st.done ? 'checked' : ''} data-action="toggleSubtask" data-task-id="${task.id}" data-subtask-id="${sti}">
                         <span>${st.title}</span>
                     </label>
@@ -75,7 +75,7 @@ export function renderKanban() {
         el.innerHTML = `
             <div class="task-card-header">
                 <h4 class="task-title">${task.title}</h4>
-                <span class="task-time"><i class="fa-regular fa-clock"></i> ${task.time}</span>
+                <span class="task-complexity badge-${task.complexity || 'M'}">${task.complexity || 'M'}</span>
             </div>
             ${subtasksHTML}
             <div class="card-actions" style="justify-content: space-between;">
@@ -214,16 +214,25 @@ export async function breakDownTask(taskId) {
             : "Нет текущих подзадач";
             
         const prompt = `
-        Глобальный проект: "${project.title}".
-        Шаг: "${task.title}".
-        Уже есть подзадачи: "${existingSubtasks}".
+        Роль: Ты — Senior Project Manager и Agile-эксперт.
+        Проект: "${project.title}".
+        Текущая задача: "${task.title}".
+        Уже существующие подзадачи: "${existingSubtasks}".
         
-        Твоя цель: Придумать 3-5 НОВЫХ, ДОПОЛНИТЕЛЬНЫХ микро-действий (subtasks), которые углубляют и продолжают этот шаг. Не повторяй существующие пункты.
-        Ответь СТРОГО массивом JSON без дополнительных объектов-оберток. Никогда не пиши поясняющий текст.
+        Задача: Декомпозировать эту задачу еще на 3-5 подзадач (subtasks) используя принцип MECE (взаимоисключающие, совместно исчерпывающие).
+        Они не должны дублировать уже существующие подзадачи.
+        
+        Требования:
+        1. Action-Oriented: Заголовки должны начинаться с глагола (например, "Разработать API...").
+        2. DoD (Definition of Done): Для каждой подзадачи напиши краткое описание/критерий приемки (свойство description).
+        
+        Ответь строго в формате JSON, представляющем массив объектов. Не пиши никакой другой текст.
         Пример:
         [
-            { "title": "Новый шаг 1" },
-            { "title": "Новый шаг 2" }
+            { 
+              "title": "Спроектировать схему БД", 
+              "description": "Таблицы созданы, связи настроены, скрипты миграции готовы." 
+            }
         ]
         `;
 
@@ -234,11 +243,16 @@ export async function breakDownTask(taskId) {
         
         const jsonStart = textResponse.indexOf('[');
         const jsonEnd = textResponse.lastIndexOf(']');
-        if (jsonStart === -1 || jsonEnd === -1) throw new Error('Не удалось найти JSON массив');
+        if (jsonStart === -1 || jsonEnd === -1) throw new Error('Не удалось извлечь JSON массив');
         
         const parsedSubtasks = JSON.parse(textResponse.substring(jsonStart, jsonEnd + 1));
         
-        const newSubtasks = parsedSubtasks.map(st => ({ title: st.title, done: false }));
+        const newSubtasks = parsedSubtasks.map(st => ({ 
+            title: st.title, 
+            description: st.description || '',
+            done: false 
+        }));
+        
         if (task.subtasks) {
             task.subtasks.push(...newSubtasks);
         } else {
@@ -290,26 +304,38 @@ export async function handleCreateProject() {
 
     try {
         const prompt = `
-        Действуй как опытный менеджер проектов.
-        Глобальная задача: "${goal}".
-        Ссылки: "${link || 'Нет'}".
+        Роль: Ты — Senior Project Manager, Системный аналитик и Agile-эксперт.
         
-        Твоя цель:
-        1. Проанализировать задачу, ссылки и прикрепленные файлы.
-        2. Разбить задачу на 5-8 конкретных шагов.
-        3. Для каждого шага написать короткий заголовок (title) и оценить время. Обязательно используй понятный формат: часы и минуты, или дни (например: "1 час 30 мин", "4 часа", "2 дня", "45 мин"). ИЗБЕГАЙ больших чисел только в минутах (не пиши "400 мин").
-        4. Сразу разбить каждый шаг на 3-5 простых микро-действий (subtasks). Описание (description) писать НЕ НУЖНО.
+        Главная цель: "${goal}".
+        Дополнительная ссылка: "${link || 'Нет'}".
         
-        Ответь СТРОГО в формате JSON:
+        Твоя задача:
+        1. Оценить предоставленные источники (ссылку и файлы, если они есть). Насколько они полезны для декомпозиции?
+        2. Разбить цель на 5-8 крупных задач по принципу MECE (взаимоисключающие, совместно исчерпывающие).
+        3. Заголовки задач должны быть Action-Oriented (начинаться с глагола, например: "Настроить сервер").
+        4. Для каждой задачи указать "complexity" (сложность: S, M, L, XL).
+        5. Разбить каждую задачу на 3-5 конкретных подзадач.
+        6. Для каждой подзадачи написать "description" (Definition of Done - критерии приемки).
+        
+        Верни строго JSON объект следующей структуры, без Markdown оборачивания (```json) и без лишнего текста:
         {
+            "source_evaluation": [
+                {
+                    "source_name": "Название источника (например, ссылка или имя файла)",
+                    "usefulness_score": 5,
+                    "reason": "Кратко почему источник полезен (или не полезен)."
+                }
+            ],
             "tasks": [
-                { 
-                    "title": "Сделать X", 
-                    "time": "15 мин", 
+                {
+                    "title": "Название задачи",
+                    "complexity": "M",
                     "subtasks": [
-                        {"title": "Шаг 1"}, 
-                        {"title": "Шаг 2"}
-                    ] 
+                        { 
+                            "title": "Название подзадачи", 
+                            "description": "Критерии того, что подзадача выполнена" 
+                        }
+                    ]
                 }
             ]
         }
@@ -319,9 +345,9 @@ export async function handleCreateProject() {
 
         for (const fd of state.attachedFilesData) {
             if (fd.type === 'text') {
-                contents[0].parts.push({ text: `\nТекст из файла "${fd.name}":\n${fd.data}` });
+                contents[0].parts.push({ text: `\n--- Файл "${fd.name}":\n${fd.data}` });
             } else if (fd.type === 'base64') {
-                contents[0].parts.push({ text: `\nФайл "${fd.name}":` });
+                contents[0].parts.push({ text: `\n--- Файл "${fd.name}":` });
                 contents[0].parts.push({
                     inlineData: { mimeType: fd.mime, data: fd.data }
                 });
@@ -342,12 +368,17 @@ export async function handleCreateProject() {
             goal: goal,
             link: link,
             files: state.attachedFilesData.map(f => f.name),
+            source_evaluation: parsed.source_evaluation || [],
             tasks: parsed.tasks.map((t, i) => ({
                 id: `task_${Date.now()}_${i}`,
                 title: t.title,
-                time: t.time || '-',
+                complexity: t.complexity || 'M',
                 status: 'todo',
-                subtasks: t.subtasks ? t.subtasks.map(st => ({ title: st.title, done: false })) : []
+                subtasks: (t.subtasks || []).map(st => ({
+                    title: st.title,
+                    description: st.description || '',
+                    done: false
+                }))
             }))
         };
 
@@ -393,7 +424,7 @@ export function expandTask(taskId) {
         }
         
         if (dom.modalTaskTitle) dom.modalTaskTitle.textContent = task.title || '';
-        if (dom.modalTaskTime) dom.modalTaskTime.innerHTML = `<i class="fa-regular fa-clock"></i> ${task.time || ''}`;
+        if (dom.modalTaskTime) dom.modalTaskTime.innerHTML = `<span class="task-complexity badge-${task.complexity || 'M'}">${task.complexity || 'M'}</span>`;
         
         if (dom.modalSubtasks) {
             if (task.subtasks && task.subtasks.length > 0) {
