@@ -1,0 +1,124 @@
+﻿/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.hidden { display: none !important; }
+.hidden { display: none !important; }
+.task-modal-content {
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2.5rem;
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.modal-header h2 {
+    font-size: 1.7rem;
+    margin: 0;
+    line-height: 1.2;
+    word-break: break-word;
+}
+.modal-header .task-time {
+    margin-left: auto;
+    font-size: 0.9rem;
+}
+#closeTaskModalBtn {
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}
+.task-desc-large {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
+}
+.card-dark .task-desc-large {
+    color: var(--text-muted-light);
+}
+.icon-btn-circle {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--card-gray);
+    cursor: pointer;
+    display: flex; justify-content: center; align-items: center;
+    transition: background 0.2s;
+    color: var(--text-dark);
+}
+.icon-btn-circle:hover { background: #e4e4e7; }
+.card-dark .icon-btn-circle {
+    background: rgba(255,255,255,0.1);
+    color: var(--card-white);
+}
+.card-dark .icon-btn-circle:hover {
+    background: rgba(255,255,255,0.2);
+}
+.subtasks-container-large .subtask-item {
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Context Modal Specific Styles */
+.context-group {
+    margin-bottom: 1.5rem;
+}
+.label-muted {
+    font-size: 0.85rem;
+    color: var(--text-muted-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+.context-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    background: rgba(255,255,255,0.05);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-light);
+    word-break: break-word;
+}
+.file-badge-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.file-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.1);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Dynamic Modal Button Colors */
+.primary-btn.card-white { background: var(--card-white); color: var(--text-dark); }
+.primary-btn.card-purple { background: var(--card-purple); color: var(--text-dark); }
+.primary-btn.card-mint { background: var(--card-mint); color: var(--text-dark); }
+.primary-btn.card-dark { background: var(--card-dark); color: var(--text-light); }
+
+.primary-btn.card-white:hover { filter: brightness(0.95); background: var(--card-white); }
+.primary-btn.card-purple:hover { filter: brightness(0.95); background: var(--card-purple); }
+.primary-btn.card-mint:hover { filter: brightness(0.95); background: var(--card-mint); }
+.primary-btn.card-dark:hover { filter: brightness(1.2); background: var(--card-dark); }
+

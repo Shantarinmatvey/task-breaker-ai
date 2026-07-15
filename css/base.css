@@ -1,0 +1,43 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    height: 100dvh;
+    overflow: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.4);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(128, 128, 128, 0.6);
+}
+
+/* Bento Card Base */
+.bento-card {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+.card-dark { background-color: var(--card-dark); color: var(--text-light); }
+.card-dark .subtitle { color: var(--text-muted-light); }
+.card-white { background-color: var(--card-white); color: var(--text-dark); }
+.card-mint { background-color: var(--card-mint); color: var(--text-dark); }
+.card-purple { background-color: var(--card-purple); color: var(--text-dark); }
+

@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Task Breaker</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect x='80' y='80' width='150' height='350' rx='10' fill='%238b5cf6'/><rect x='250' y='150' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='350' y='150' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='250' y='250' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='350' y='250' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='250' y='350' width='80' height='80' rx='10' fill='%238b5cf6'/><rect x='350' y='350' width='80' height='80' rx='10' fill='%238b5cf6'/></svg>" type="image/svg+xml">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components/kanban.css">
+    <link rel="stylesheet" href="css/components/modals.css">
+    <link rel="stylesheet" href="css/components/auth.css">
+    <link rel="stylesheet" href="css/components/features.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Mammoth.js for DOCX reading -->
@@ -37,7 +43,7 @@
                 <p id="authSubtitle" class="subtitle">Добро пожаловать обратно</p>
             </div>
             
-            <form id="authForm" onsubmit="event.preventDefault();">
+            <form id="authForm">
                 <div class="input-group">
                     <label>Email</label>
                     <input type="email" id="authEmail" class="text-input" placeholder="Введите ваш email" required style="color: var(--text-dark); border: 1px solid #d4d4d8; background: transparent;">
@@ -400,7 +406,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
-    <script src="auth.js?v=6"></script>
-    <script src="app.js?v=7"></script>
+    <script type="module" src="js/app.js?v=7"></script>
 </body>
 </html>
