@@ -120,7 +120,7 @@
         <main class="main-content">
             
             <!-- View 1: New Project Form -->
-            <div id="newProjectView" class="view-container">
+            <div id="newProjectView" class="view-container hidden">
                 <section class="bento-card card-dark main-input-card">
                     <h2>Новая задача</h2>
                     <p class="subtitle">Опишите цель, и ИИ создаст Канбан-доску с пошаговым планом и оценкой времени.</p>
@@ -246,7 +246,7 @@
         <div id="taskModalContainer" class="modal-content bento-card card-white task-modal-content">
             <div class="modal-header">
                 <h2 id="modalTaskTitle">Task Title</h2>
-                <span class="task-time" id="modalTaskTime"><i class="fa-regular fa-clock"></i> 0 мин</span>
+                <span id="modalTaskTime"><i class="fa-regular fa-clock"></i> 0 мин</span>
                 <button id="closeTaskModalBtn" class="icon-btn-circle small"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
