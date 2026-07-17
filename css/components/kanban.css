@@ -303,12 +303,16 @@
 
 /* Action Buttons Refinement */
 .delete-btn {
-    background: rgba(156, 163, 175, 0.1) !important;
-    color: #9ca3af !important;
+    border: 1px solid currentColor !important;
+    background: transparent !important;
+    color: inherit !important;
+    opacity: 0.8;
+    transition: opacity 0.2s, background 0.2s, color 0.2s, border-color 0.2s;
 }
 .delete-btn:hover {
     background: rgba(239, 68, 68, 0.1) !important;
     color: #ef4444 !important;
+    border-color: #ef4444 !important;
 }
 
 /* Universal Card Action Buttons */
@@ -316,7 +320,7 @@
     border: 1px solid currentColor !important;
     background: transparent !important;
     color: inherit !important;
-    opacity: 0.6;
+    opacity: 0.8;
     transition: opacity 0.2s, background 0.2s, color 0.2s;
 }
 .card-action-btn:hover {

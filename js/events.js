@@ -321,10 +321,7 @@ export function setupEventListeners() {
                 if(task) {
                     task.subtasks[subtaskId].done = target.checked;
                     saveState();
-                    renderKanban();
-                    if (dom.taskModal && !dom.taskModal.classList.contains('hidden') && dom.modalTaskTitle && dom.modalTaskTitle.textContent === task.title) {
-                        expandTask(taskId);
-                    }
+                    // We DO NOT call renderKanban() here to prevent the card from jumping or re-rendering
                 }
             }
         }
