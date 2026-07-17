@@ -158,7 +158,8 @@ export function initSortable() {
             scrollSpeed: 20,
             bubbleScroll: true,
             fallbackOnBody: true,
-            swapThreshold: 0.65,
+            invertSwap: true,
+            direction: 'vertical',
             ghostClass: 'sortable-ghost',
             dragClass: 'sortable-drag',
             onEnd: function (evt) {
