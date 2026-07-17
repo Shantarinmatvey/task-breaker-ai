@@ -1,4 +1,4 @@
-﻿/* Layout */
+/* Layout */
 .app-layout {
     display: flex;
     height: 100vh;
@@ -176,7 +176,7 @@
         top: 0;
         left: 0;
         width: 100vw;
-        height: 100vh;
+        height: 100dvh;
         background: rgba(0, 0, 0, 0.4);
         z-index: 1000;
         backdrop-filter: blur(2px);
@@ -194,7 +194,8 @@
         top: 0;
         left: -300px;
         width: 280px;
-        height: 100vh;
+        height: 100dvh;
+        overflow-y: auto;
         z-index: 1001;
         transition: left 0.3s ease;
         border-radius: 0;
@@ -230,16 +231,19 @@
     
     /* Kanban Board Mobile Scrolling */
     .kanban-board {
-        gap: 1rem;
-        padding-bottom: 1.5rem;
-        padding-right: 1.5rem; /* Ensure right margin when scrolling */
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding-bottom: 2rem;
+        padding-right: 0;
+        scroll-snap-type: none;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .kanban-column {
-        min-width: 85vw; /* Almost full screen width for better readability */
-        scroll-snap-align: center;
+        min-width: 100%;
+        width: 100%;
+        scroll-snap-align: none;
         flex: 0 0 auto;
     }
 
