@@ -82,10 +82,10 @@ export function renderKanban() {
             ${subtasksHTML}
             <div class="card-actions" style="justify-content: space-between;">
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <button class="expand-btn" data-action="expandTask" data-task-id="${task.id}" style="border: 1px solid #e4e4e7; background: transparent;">
+                    <button class="expand-btn card-action-btn" data-action="expandTask" data-task-id="${task.id}">
                         <i class="fa-solid fa-expand" style="pointer-events: none;"></i> Развернуть
                     </button>
-                    <button class="break-down-btn" data-action="${activeBreakdownRequests[task.id] ? 'abortBreakdown' : 'breakDownTask'}" data-task-id="${task.id}" style="border: 1px solid var(--card-purple); background: ${activeBreakdownRequests[task.id] ? 'var(--card-dark)' : 'transparent'}; color: ${activeBreakdownRequests[task.id] ? '#fff' : 'var(--text-dark)'};">
+                    <button class="break-down-btn card-action-btn ${activeBreakdownRequests[task.id] ? 'active' : ''}" data-action="${activeBreakdownRequests[task.id] ? 'abortBreakdown' : 'breakDownTask'}" data-task-id="${task.id}">
                         <i class="fa-solid ${activeBreakdownRequests[task.id] ? 'fa-spinner fa-spin' : 'fa-list-check'}" style="pointer-events: none;"></i> ${activeBreakdownRequests[task.id] ? 'Отменить' : 'Раздробить'}
                     </button>
                 </div>

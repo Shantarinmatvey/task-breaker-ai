@@ -311,14 +311,22 @@
     color: #ef4444 !important;
 }
 
-.expand-btn, .break-down-btn {
-    color: var(--text-dark);
+/* Universal Card Action Buttons */
+.card-action-btn {
+    border: 1px solid currentColor !important;
+    background: transparent !important;
+    color: inherit !important;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s, color 0.2s;
 }
-.expand-btn:hover {
-    background: rgba(0, 0, 0, 0.03) !important;
+.card-action-btn:hover {
+    opacity: 1;
+    background: rgba(128, 128, 128, 0.1) !important;
 }
-.break-down-btn:hover {
-    background: var(--card-purple) !important;
-    color: var(--text-dark) !important;
+.card-action-btn.active {
+    opacity: 1;
+    background: currentColor !important;
+    color: var(--bg-color) !important;
+    border-color: currentColor !important;
 }
 
