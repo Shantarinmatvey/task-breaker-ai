@@ -30,15 +30,23 @@
 }
 .modal-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
     margin-bottom: 1.5rem;
+}
+.modal-header > div {
+    margin-top: 0.2rem;
 }
 .modal-header h2 {
     font-size: 1.7rem;
     margin: 0;
     line-height: 1.2;
     word-break: break-word;
+}
+.modal-header .task-complexity {
+    font-size: 0.95rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-md);
 }
 .modal-header .task-time {
     margin-left: auto;
