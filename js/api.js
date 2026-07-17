@@ -2,8 +2,7 @@ import { state } from './state.js';
 import { dom } from './dom.js';
 
 export function getApiKey() {
-    if (!state.currentUser) return '';
-    return localStorage.getItem(`gemini_api_key_${state.currentUser.uid}`) || '';
+    return state.geminiApiKey || '';
 }
 
 export async function callGemini(contents, signal = null) {

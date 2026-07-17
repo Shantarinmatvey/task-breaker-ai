@@ -1,4 +1,4 @@
-﻿* {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -34,10 +34,21 @@ body {
 .bento-card {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
+.bento-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
 .card-dark { background-color: var(--card-dark); color: var(--text-light); }
 .card-dark .subtitle { color: var(--text-muted-light); }
 .card-white { background-color: var(--card-white); color: var(--text-dark); }
 .card-mint { background-color: var(--card-mint); color: var(--text-dark); }
 .card-purple { background-color: var(--card-purple); color: var(--text-dark); }
+
+/* Global transitions */
+button, input, select, textarea, .project-item, .task-card, .icon-btn-circle {
+    transition: all 0.2s ease;
+}
 

@@ -1,4 +1,4 @@
-﻿/* Modals */
+/* Modals */
 .modal {
     position: fixed;
     top: 0;
@@ -10,9 +10,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-.modal.hidden { display: none !important; }
+.modal.hidden { 
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
 .hidden { display: none !important; }
 .task-modal-content {
     width: 90%;
@@ -122,3 +129,6 @@
 .primary-btn.card-mint:hover { filter: brightness(0.95); background: var(--card-mint); }
 .primary-btn.card-dark:hover { filter: brightness(1.2); background: var(--card-dark); }
 
+#apiInput {
+    -webkit-text-security: disc;
+}

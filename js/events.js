@@ -47,7 +47,7 @@ export function setupEventListeners() {
 
     if (dom.openApiModalBtn) {
         dom.openApiModalBtn.addEventListener('click', () => {
-            if (dom.apiInput) dom.apiInput.value = getApiKey();
+            if (dom.apiInput) dom.apiInput.value = state.geminiApiKey || '';
             if (dom.apiModal) dom.apiModal.classList.remove('hidden');
         });
     }
@@ -57,9 +57,8 @@ export function setupEventListeners() {
         dom.saveApiBtn.addEventListener('click', () => {
             const key = dom.apiInput.value.trim();
             if (key) {
-                if (state.currentUser) {
-                    localStorage.setItem(`gemini_api_key_${state.currentUser.uid}`, key);
-                }
+                state.geminiApiKey = key;
+                saveState();
                 if (dom.apiModal) dom.apiModal.classList.add('hidden');
                 showToast('API ключ успешно сохранен');
             } else {
