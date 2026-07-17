@@ -77,10 +77,7 @@ export function renderKanban() {
         el.innerHTML = `
             <div class="task-card-header">
                 <h4 class="task-title">${task.title}</h4>
-                <div style="display: flex; gap: 0.5rem; align-items: center;">
-                    <span class="task-complexity badge-${task.complexity || 'M'}">${task.complexity || 'M'}</span>
-                    <i class="fa-solid fa-grip-vertical drag-handle" title="Перетащить"></i>
-                </div>
+                <span class="task-complexity badge-${task.complexity || 'M'}">${task.complexity || 'M'}</span>
             </div>
             ${subtasksHTML}
             <div class="card-actions" style="justify-content: space-between;">
@@ -153,7 +150,8 @@ export function initSortable() {
         new Sortable(col, {
             group: 'kanban',
             animation: 150,
-            handle: '.drag-handle',
+            delay: 150,
+            delayOnTouchOnly: true,
             fallbackOnBody: true,
             ghostClass: 'sortable-ghost',
             dragClass: 'sortable-drag',

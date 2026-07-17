@@ -282,27 +282,9 @@
 .break-down-btn:hover, .expand-btn:hover { background: rgba(0,0,0,0.1); }
 .card-dark .break-down-btn:hover, .card-dark .expand-btn:hover { background: rgba(255,255,255,0.2); }
 
-/* SortableJS Ghost Classes and Drag Handle */
+/* SortableJS Ghost Classes */
 .sortable-ghost { opacity: 0.4; }
 .sortable-drag { cursor: grabbing !important; }
-
-.drag-handle {
-    cursor: grab;
-    color: var(--text-muted-dark);
-    font-size: 1.2rem;
-    padding: 0.2rem;
-    opacity: 0.5;
-    transition: opacity 0.2s, color 0.2s;
-}
-.drag-handle:hover {
-    opacity: 0.8;
-}
-.card-dark .drag-handle {
-    color: var(--text-muted-light);
-}
-.drag-handle:active {
-    cursor: grabbing;
-}
 
 /* Complexity Badges */
 .task-complexity {
