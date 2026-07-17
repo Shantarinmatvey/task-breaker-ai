@@ -1,7 +1,7 @@
 import { dom } from './dom.js';
 import { state, saveState, showToast } from './state.js';
 import { showNewProjectView } from './modals.js';
-import { callGemini, getApiKey } from './api.js';
+import { callGemini } from './api.js';
 
 export function selectProject(id) {
     state.currentProjectId = id;
@@ -282,12 +282,6 @@ export async function breakDownTask(taskId) {
 }
 
 export async function handleCreateProject() {
-    if (!getApiKey()) {
-        showToast("Пожалуйста, добавьте API ключ (кнопка слева внизу)");
-        if(dom.apiModal) dom.apiModal.classList.remove('hidden');
-        return;
-    }
-
     const customTitle = dom.projectTitleInput.value.trim();
     const goal = dom.taskInput.value.trim();
     const link = dom.linkInput.value.trim();

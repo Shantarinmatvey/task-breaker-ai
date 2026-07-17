@@ -2,7 +2,6 @@ import { dom } from './dom.js';
 import { state, saveState, showToast } from './state.js';
 import { renderSidebar, selectProject, renderKanban, renderManualSubtasks, breakDownTask, abortBreakdown, handleCreateProject, expandTask } from './kanban.js';
 import { showNewProjectView, renderNewProjectFiles, closeAllModals } from './modals.js';
-import { getApiKey } from './api.js';
 
 export function setupEventListeners() {
     if (dom.mobileMenuBtn && dom.mobileSidebarOverlay && dom.sidebar) {
@@ -44,29 +43,6 @@ export function setupEventListeners() {
         });
     }
     if (dom.closeAccountModalBtn) dom.closeAccountModalBtn.addEventListener('click', () => { if(dom.accountModal) dom.accountModal.classList.add('hidden'); });
-
-    if (dom.openApiModalBtn) {
-        dom.openApiModalBtn.addEventListener('click', () => {
-            if (dom.apiInput) dom.apiInput.value = getApiKey();
-            if (dom.apiModal) dom.apiModal.classList.remove('hidden');
-        });
-    }
-    if (dom.closeApiModalBtn) dom.closeApiModalBtn.addEventListener('click', () => { if(dom.apiModal) dom.apiModal.classList.add('hidden'); });
-
-    if (dom.saveApiBtn) {
-        dom.saveApiBtn.addEventListener('click', () => {
-            const key = dom.apiInput.value.trim();
-            if (key) {
-                if (state.currentUser) {
-                    localStorage.setItem(`gemini_api_key_${state.currentUser.uid}`, key);
-                }
-                if (dom.apiModal) dom.apiModal.classList.add('hidden');
-                showToast('API ключ успешно сохранен');
-            } else {
-                showToast('Пожалуйста, введите валидный ключ');
-            }
-        });
-    }
 
     if (dom.projectContextBtn) {
         dom.projectContextBtn.addEventListener('click', () => {
