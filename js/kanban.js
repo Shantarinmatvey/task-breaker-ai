@@ -150,9 +150,15 @@ export function initSortable() {
         new Sortable(col, {
             group: 'kanban',
             animation: 150,
+            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
             delay: 150,
             delayOnTouchOnly: true,
+            scroll: true,
+            scrollSensitivity: 80,
+            scrollSpeed: 20,
+            bubbleScroll: true,
             fallbackOnBody: true,
+            swapThreshold: 0.65,
             ghostClass: 'sortable-ghost',
             dragClass: 'sortable-drag',
             onEnd: function (evt) {
