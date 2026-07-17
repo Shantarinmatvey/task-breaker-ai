@@ -1,28 +1,36 @@
+import { state } from './state.js';
 import { dom } from './dom.js';
 
-// TODO: Замените этот URL на адрес вашего Cloudflare Worker
-const CLOUDFLARE_WORKER_URL = "https://YOUR-WORKER-NAME.YOUR-USERNAME.workers.dev/";
+export function getApiKey() {
+    if (!state.currentUser) return '';
+    return localStorage.getItem(`gemini_api_key_${state.currentUser.uid}`) || '';
+}
 
 export async function callGemini(contents, signal = null) {
-    if (CLOUDFLARE_WORKER_URL.includes("YOUR-WORKER-NAME")) {
-        throw new Error('Пожалуйста, укажите URL вашего Cloudflare Worker в файле js/api.js');
+    const apiKey = getApiKey();
+    if (!apiKey) {
+        if (dom.apiModal) dom.apiModal.classList.remove('hidden');
+        throw new Error('Укажите API ключ Google Gemini в настройках (кнопка слева внизу).');
     }
 
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent`;
+    
     const fetchOptions = {
         method: 'POST',
         headers: { 
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-goog-api-key': apiKey
         },
         body: JSON.stringify({ contents })
     };
     
     if (signal) fetchOptions.signal = signal;
 
-    const response = await fetch(CLOUDFLARE_WORKER_URL, fetchOptions);
+    const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || 'API Error');
+        const errData = await response.json();
+        throw new Error(errData.error?.message || 'API Error');
     }
     
     return await response.json();

@@ -107,6 +107,9 @@
                 </ul>
             </div>
             <div class="sidebar-footer" style="margin-top: auto; padding-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <button id="openApiModalBtn" class="primary-btn card-dark small-btn">
+                    <i class="fa-solid fa-key"></i> Настройки API
+                </button>
                 <button id="openAccountModalBtn" class="text-btn" style="justify-content: center; width: 100%; padding: 0.5rem; color: var(--text-muted-dark);">
                     <i class="fa-solid fa-user"></i> Аккаунт
                 </button>
@@ -299,6 +302,34 @@
             <button id="logoutBtn" class="primary-btn danger" style="width: 100%; justify-content: center;">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти из аккаунта
             </button>
+        </div>
+    </div>
+
+    <!-- API Modal -->
+    <div id="apiModal" class="modal hidden">
+        <div class="modal-content bento-card card-dark task-modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>API Ключ</h2>
+                <button id="closeApiModalBtn" class="icon-btn-circle small"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="task-desc" style="margin-bottom: 1.5rem; color: var(--text-light);">
+                    Для работы приложения необходим API ключ Google Gemini.<br><br>
+                    Вы можете получить его бесплатно в 
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--card-mint); text-decoration: underline;">Google AI Studio</a>. 
+                    Нажмите кнопку "Create API key", выберите проект (или создайте новый) и скопируйте ключ сюда.
+                </p>
+                <div class="input-group">
+                    <label>Gemini API Key</label>
+                    <input type="password" id="apiInput" autocomplete="new-password" placeholder="Введите ваш API ключ..." class="text-input" style="background: rgba(255,255,255,0.1); color: var(--text-light); border-color: rgba(255,255,255,0.2);">
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 0.5rem;">Ключ надежно сохраняется только в вашем аккаунте.</p>
+                </div>
+                <div class="modal-footer" style="margin-top: 2rem;">
+                    <button id="saveApiBtn" class="primary-btn accent-green">
+                        <i class="fa-solid fa-check"></i> Сохранить
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
