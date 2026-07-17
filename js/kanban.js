@@ -3,6 +3,8 @@ import { state, saveState, showToast } from './state.js';
 import { showNewProjectView } from './modals.js';
 import { callGemini, getApiKey } from './api.js';
 
+export const activeBreakdownRequests = {};
+
 export function selectProject(id) {
     state.currentProjectId = id;
     renderSidebar();
@@ -80,14 +82,14 @@ export function renderKanban() {
             ${subtasksHTML}
             <div class="card-actions" style="justify-content: space-between;">
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <button class="expand-btn" data-action="expandTask" data-task-id="${task.id}">
-                        <i class="fa-solid fa-expand" style="pointer-events: none;"></i> Читать
+                    <button class="expand-btn" data-action="expandTask" data-task-id="${task.id}" style="border: 1px solid #e4e4e7; background: transparent;">
+                        <i class="fa-solid fa-expand" style="pointer-events: none;"></i> Развернуть
                     </button>
-                    <button class="break-down-btn" data-action="breakDownTask" data-task-id="${task.id}">
-                        <i class="fa-solid fa-list-check" style="pointer-events: none;"></i> Раздробить
+                    <button class="break-down-btn" data-action="${activeBreakdownRequests[task.id] ? 'abortBreakdown' : 'breakDownTask'}" data-task-id="${task.id}" style="border: 1px solid var(--card-purple); background: ${activeBreakdownRequests[task.id] ? 'var(--card-dark)' : 'transparent'}; color: ${activeBreakdownRequests[task.id] ? '#fff' : 'var(--text-dark)'};">
+                        <i class="fa-solid ${activeBreakdownRequests[task.id] ? 'fa-spinner fa-spin' : 'fa-list-check'}" style="pointer-events: none;"></i> ${activeBreakdownRequests[task.id] ? 'Отменить' : 'Раздробить'}
                     </button>
                 </div>
-                <button class="icon-btn-circle small" data-action="deleteTask" data-task-id="${task.id}" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; align-self: center;" title="Удалить задачу">
+                <button class="icon-btn-circle small delete-btn" data-action="deleteTask" data-task-id="${task.id}" title="Удалить задачу">
                     <i class="fa-solid fa-trash" style="pointer-events: none;"></i>
                 </button>
             </div>
@@ -180,8 +182,6 @@ export function initSortable() {
         });
     });
 }
-
-export const activeBreakdownRequests = {};
 
 export function abortBreakdown(taskId) {
     if (activeBreakdownRequests[taskId]) {

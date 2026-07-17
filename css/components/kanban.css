@@ -301,3 +301,24 @@
 .badge-L { background: #f59e0b; }
 .badge-XL { background: #ef4444; }
 
+/* Action Buttons Refinement */
+.delete-btn {
+    background: rgba(156, 163, 175, 0.1) !important;
+    color: #9ca3af !important;
+}
+.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+}
+
+.expand-btn, .break-down-btn {
+    color: var(--text-dark);
+}
+.expand-btn:hover {
+    background: rgba(0, 0, 0, 0.03) !important;
+}
+.break-down-btn:hover {
+    background: var(--card-purple) !important;
+    color: var(--text-dark) !important;
+}
+
