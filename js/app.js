@@ -8,6 +8,19 @@ import { dom } from './dom.js';
 document.addEventListener('app:init', async () => {
     await loadState();
     initSortable();
+    
+    renderSidebar();
+    if (state.projects && state.projects.length > 0) {
+        if (!state.currentProjectId) {
+            state.currentProjectId = state.projects[0].id;
+        }
+        renderKanban();
+        if(dom.newProjectView) dom.newProjectView.classList.add('hidden');
+        if(dom.kanbanView) dom.kanbanView.classList.remove('hidden');
+    } else {
+        if(dom.kanbanView) dom.kanbanView.classList.add('hidden');
+        if(dom.newProjectView) dom.newProjectView.classList.remove('hidden');
+    }
 });
 
 document.addEventListener('app:logout', () => {
