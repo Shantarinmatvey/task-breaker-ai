@@ -116,15 +116,14 @@ export function renderKanban() {
 
 export function updateChart(todo, inProgress, done) {
     const total = todo + inProgress + done;
-    if (total === 0) return;
     
-    const pTodo = todo / total;
-    const pInProg = inProgress / total;
-    const pDone = done / total;
+    const pTodo = total > 0 ? (todo / total) * 100 : 0;
+    const pInProg = total > 0 ? (inProgress / total) * 100 : 0;
+    const pDone = total > 0 ? (done / total) * 100 : 0;
     
-    if(dom.circleTodo) dom.circleTodo.style.strokeDashoffset = 251.2 - (251.2 * pTodo);
-    if(dom.circleInProgress) dom.circleInProgress.style.strokeDashoffset = 188.5 - (188.5 * pInProg);
-    if(dom.circleDone) dom.circleDone.style.strokeDashoffset = 125.6 - (125.6 * pDone);
+    if(dom.barTodo) dom.barTodo.style.width = `${pTodo}%`;
+    if(dom.barInProgress) dom.barInProgress.style.width = `${pInProg}%`;
+    if(dom.barDone) dom.barDone.style.width = `${pDone}%`;
     
     if(dom.statTextTodo) dom.statTextTodo.textContent = todo;
     if(dom.statTextInProgress) dom.statTextInProgress.textContent = inProgress;
@@ -154,12 +153,10 @@ export function initSortable() {
             delay: 150,
             delayOnTouchOnly: true,
             scroll: true,
-            scrollSensitivity: 80,
+            scrollSensitivity: 100,
             scrollSpeed: 20,
             bubbleScroll: true,
-            fallbackOnBody: true,
-            invertSwap: true,
-            direction: 'vertical',
+            swapThreshold: 0.5,
             ghostClass: 'sortable-ghost',
             dragClass: 'sortable-drag',
             onEnd: function (evt) {

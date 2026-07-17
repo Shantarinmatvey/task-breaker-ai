@@ -183,17 +183,13 @@
                     </div>
                     
                     <div class="project-stats-widget">
-                        <svg width="100" height="100" viewBox="0 0 100 100" class="circular-chart">
-                            <!-- Background circles -->
-                            <circle class="circle-bg" cx="50" cy="50" r="40" />
-                            <circle class="circle-bg" cx="50" cy="50" r="30" />
-                            <circle class="circle-bg" cx="50" cy="50" r="20" />
-                            
-                            <!-- Progress circles -->
-                            <circle class="circle-todo" id="circleTodo" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
-                            <circle class="circle-inprogress" id="circleInProgress" cx="50" cy="50" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5" />
-                            <circle class="circle-done" id="circleDone" cx="50" cy="50" r="20" stroke-dasharray="125.6" stroke-dashoffset="125.6" />
-                        </svg>
+                        <div class="linear-progress-container">
+                            <div class="linear-progress-bar">
+                                <div class="progress-segment segment-done" id="barDone" style="width: 0%"></div>
+                                <div class="progress-segment segment-inprogress" id="barInProgress" style="width: 0%"></div>
+                                <div class="progress-segment segment-todo" id="barTodo" style="width: 0%"></div>
+                            </div>
+                        </div>
                         <div class="stats-legend">
                             <div class="legend-item"><span class="dot dot-todo"></span> К выполнению (<span id="statTextTodo">0</span>)</div>
                             <div class="legend-item"><span class="dot dot-inprogress"></span> В процессе (<span id="statTextInProgress">0</span>)</div>
