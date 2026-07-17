@@ -159,24 +159,47 @@ export function initSortable() {
                 const itemEl = evt.item;
                 const taskId = itemEl.dataset.taskId;
                 const newStatus = evt.to.dataset.status;
+                const fromList = evt.from;
+                const toList = evt.to;
+                
+                // If moved to a new column, force it to the bottom
+                if (fromList !== toList) {
+                    toList.appendChild(itemEl);
+                }
                 
                 const project = state.projects.find(p => p.id === state.currentProjectId);
                 if (project) {
                     const task = project.tasks.find(t => t.id === taskId);
-                    if (task && task.status !== newStatus) {
+                    if (task) {
                         task.status = newStatus;
-                        saveState();
-                        
-                        const todoCount = project.tasks.filter(t => t.status === 'todo').length;
-                        const inProgressCount = project.tasks.filter(t => t.status === 'in-progress').length;
-                        const doneCount = project.tasks.filter(t => t.status === 'done').length;
-                        
-                        if(dom.countTodo) dom.countTodo.textContent = todoCount;
-                        if(dom.countInProgress) dom.countInProgress.textContent = inProgressCount;
-                        if(dom.countDone) dom.countDone.textContent = doneCount;
-                        
-                        updateChart(todoCount, inProgressCount, doneCount);
                     }
+                    
+                    // Re-order project.tasks based on the current DOM order
+                    const domOrderIds = [];
+                    const cols = [dom.colTodo, dom.colInProgress, dom.colDone];
+                    cols.forEach(c => {
+                        if (c) {
+                            c.querySelectorAll('.task-card').forEach(card => {
+                                domOrderIds.push(card.dataset.taskId);
+                            });
+                        }
+                    });
+                    
+                    project.tasks.sort((a, b) => {
+                        return domOrderIds.indexOf(a.id) - domOrderIds.indexOf(b.id);
+                    });
+
+                    saveState();
+                    
+                    const todoCount = project.tasks.filter(t => t.status === 'todo').length;
+                    const inProgressCount = project.tasks.filter(t => t.status === 'in-progress').length;
+                    const doneCount = project.tasks.filter(t => t.status === 'done').length;
+                    
+                    if(dom.countTodo) dom.countTodo.textContent = todoCount;
+                    if(dom.countInProgress) dom.countInProgress.textContent = inProgressCount;
+                    if(dom.countDone) dom.countDone.textContent = doneCount;
+                    
+                    updateChart(todoCount, inProgressCount, doneCount);
                 }
             },
         });
