@@ -245,8 +245,13 @@ export function setupEventListeners() {
             const project = state.projects.find(p => p.id === id);
             if (!project) return;
             
-            if(dom.renameProjectInput) dom.renameProjectInput.value = project.title;
-            if(dom.renameProjectModal) dom.renameProjectModal.classList.remove('hidden');
+            if(dom.renameProjectInput) {
+                dom.renameProjectInput.value = project.title;
+            }
+            if(dom.renameProjectModal) {
+                dom.renameProjectModal.classList.remove('hidden');
+                setTimeout(() => dom.renameProjectInput && dom.renameProjectInput.focus(), 50);
+            }
             
             const handleSave = () => {
                 const newTitle = dom.renameProjectInput ? dom.renameProjectInput.value.trim() : '';
@@ -263,18 +268,18 @@ export function setupEventListeners() {
             
             const closeModal = () => {
                 if(dom.renameProjectModal) dom.renameProjectModal.classList.add('hidden');
-                if(dom.saveRenameModalBtn) dom.saveRenameModalBtn.removeEventListener('click', handleSave);
-                if(dom.closeRenameModalBtn) dom.closeRenameModalBtn.removeEventListener('click', closeModal);
-                if(dom.renameProjectInput) dom.renameProjectInput.removeEventListener('keypress', handleKeypress);
+                if(dom.saveRenameModalBtn) dom.saveRenameModalBtn.onclick = null;
+                if(dom.closeRenameModalBtn) dom.closeRenameModalBtn.onclick = null;
+                if(dom.renameProjectInput) dom.renameProjectInput.onkeypress = null;
             };
             
             const handleKeypress = (ev) => {
                 if (ev.key === 'Enter') handleSave();
             };
             
-            if(dom.saveRenameModalBtn) dom.saveRenameModalBtn.addEventListener('click', handleSave);
-            if(dom.closeRenameModalBtn) dom.closeRenameModalBtn.addEventListener('click', closeModal);
-            if(dom.renameProjectInput) dom.renameProjectInput.addEventListener('keypress', handleKeypress);
+            if(dom.saveRenameModalBtn) dom.saveRenameModalBtn.onclick = handleSave;
+            if(dom.closeRenameModalBtn) dom.closeRenameModalBtn.onclick = closeModal;
+            if(dom.renameProjectInput) dom.renameProjectInput.onkeypress = handleKeypress;
         }
         else if (action === 'deleteTask') {
             if (!confirm('Вы уверены, что хотите удалить эту задачу?')) return;
