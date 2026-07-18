@@ -322,14 +322,20 @@ export function setupEventListeners() {
                     task.subtasks[subtaskId].done = target.checked;
                     saveState();
                     
-                    const label = target.closest('label.subtask-item');
-                    if (label) {
-                        if (target.checked) {
-                            label.classList.add('done');
-                        } else {
-                            label.classList.remove('done');
+                    // Sync all checkbox instances for this subtask (in card and in modal)
+                    const checkboxes = document.querySelectorAll(`input[data-action="toggleSubtask"][data-task-id="${taskId}"][data-subtask-id="${subtaskId}"]`);
+                    checkboxes.forEach(cb => {
+                        cb.checked = target.checked;
+                        const label = cb.closest('label.subtask-item');
+                        if (label) {
+                            if (target.checked) {
+                                label.classList.add('done');
+                            } else {
+                                label.classList.remove('done');
+                            }
                         }
-                    }
+                    });
+                    
                     // We DO NOT call renderKanban() here to prevent the card from jumping or re-rendering
                 }
             }

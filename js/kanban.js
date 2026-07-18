@@ -5,6 +5,15 @@ import { callGemini, getApiKey } from './api.js';
 
 export const activeBreakdownRequests = {};
 
+export function getCardColorClass(taskId) {
+    const colors = ['card-white', 'card-purple', 'card-mint', 'card-dark'];
+    let hash = 0;
+    for(let i = 0; i < taskId.length; i++) {
+        hash = taskId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+}
+
 export function selectProject(id) {
     state.currentProjectId = id;
     renderSidebar();
@@ -51,11 +60,10 @@ export function renderKanban() {
     if(dom.colDone) dom.colDone.innerHTML = '';
     
     let doneCount = 0;
-    const colors = ['card-white', 'card-purple', 'card-mint', 'card-dark'];
 
-    project.tasks.forEach((task, index) => {
+    project.tasks.forEach((task) => {
         const el = document.createElement('div');
-        el.className = `bento-card task-card ${colors[index % colors.length]}`;
+        el.className = `bento-card task-card ${getCardColorClass(task.id)}`;
         el.dataset.taskId = task.id;
 
         if (task.status === 'done') doneCount++;
