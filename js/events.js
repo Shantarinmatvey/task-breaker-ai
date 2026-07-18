@@ -322,16 +322,18 @@ export function setupEventListeners() {
                     task.subtasks[subtaskId].done = target.checked;
                     saveState();
                     
-                    // Sync all checkbox instances for this subtask (in card and in modal)
-                    const checkboxes = document.querySelectorAll(`input[data-action="toggleSubtask"][data-task-id="${taskId}"][data-subtask-id="${subtaskId}"]`);
-                    checkboxes.forEach(cb => {
-                        cb.checked = target.checked;
-                        const label = cb.closest('label.subtask-item');
-                        if (label) {
-                            if (target.checked) {
-                                label.classList.add('done');
-                            } else {
-                                label.classList.remove('done');
+                    // Sync all checkbox instances for this subtask safely
+                    const allCheckboxes = document.querySelectorAll('input[data-action="toggleSubtask"]');
+                    allCheckboxes.forEach(cb => {
+                        if (cb.dataset.taskId === taskId && String(cb.dataset.subtaskId) === String(subtaskId)) {
+                            cb.checked = target.checked;
+                            const label = cb.closest('.subtask-item');
+                            if (label) {
+                                if (target.checked) {
+                                    label.classList.add('done');
+                                } else {
+                                    label.classList.remove('done');
+                                }
                             }
                         }
                     });
