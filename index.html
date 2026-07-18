@@ -136,8 +136,13 @@
                     </div>
                     
                     <div class="input-group">
-                        <label>Ссылки на материалы (необязательно)</label>
-                        <input type="text" id="linkInput" placeholder="https://..." class="text-input">
+                        <label>Ссылки на материалы (до 3-х)</label>
+                        <div id="linkInputsContainer" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <input type="text" class="text-input link-input" placeholder="https://...">
+                        </div>
+                        <button id="addLinkBtn" class="text-btn" style="margin-top: 0.5rem; font-size: 0.85rem; padding: 0.25rem 0.5rem;">
+                            <i class="fa-solid fa-plus"></i> Добавить еще ссылку
+                        </button>
                     </div>
 
                     <div class="input-group">

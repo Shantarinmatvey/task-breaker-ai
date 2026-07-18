@@ -30,6 +30,22 @@ export function setupEventListeners() {
         }
     });
 
+    if (dom.addLinkBtn && dom.linkInputsContainer) {
+        dom.addLinkBtn.addEventListener('click', () => {
+            const inputs = dom.linkInputsContainer.querySelectorAll('.link-input');
+            if (inputs.length < 3) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'text-input link-input';
+                input.placeholder = 'https://...';
+                dom.linkInputsContainer.appendChild(input);
+            }
+            if (dom.linkInputsContainer.querySelectorAll('.link-input').length >= 3) {
+                dom.addLinkBtn.style.display = 'none';
+            }
+        });
+    }
+
     if(dom.breakDownBtn) dom.breakDownBtn.addEventListener('click', handleCreateProject);
     
     if(dom.closeTaskModalBtn) dom.closeTaskModalBtn.addEventListener('click', () => { if(dom.taskModal) dom.taskModal.classList.add('hidden'); });

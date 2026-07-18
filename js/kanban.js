@@ -16,6 +16,7 @@ export function getCardColorClass(taskId) {
 
 export function selectProject(id) {
     state.currentProjectId = id;
+    try { localStorage.setItem('lastActiveProjectId', id); } catch(e) {}
     renderSidebar();
     renderKanban();
     if(dom.newProjectView) dom.newProjectView.classList.add('hidden');
@@ -325,7 +326,14 @@ export async function handleCreateProject() {
 
     const customTitle = dom.projectTitleInput.value.trim();
     const goal = dom.taskInput.value.trim();
-    const link = dom.linkInput.value.trim();
+    
+    const links = [];
+    if (dom.linkInputsContainer) {
+        dom.linkInputsContainer.querySelectorAll('.link-input').forEach(input => {
+            const val = input.value.trim();
+            if (val) links.push(val);
+        });
+    }
 
     if (!goal || !customTitle) {
         showToast('Пожалуйста, введите название проекта и задачу');
@@ -342,7 +350,7 @@ export async function handleCreateProject() {
         Роль: Ты — Senior Project Manager, Системный аналитик и Agile-эксперт.
         
         Главная цель: "${goal}".
-        Дополнительная ссылка: "${link || 'Нет'}".
+        Дополнительные ссылки: "${links.length > 0 ? links.join(', ') : 'Нет'}".
         
         Твоя задача:
         1. Оценить предоставленные источники (ссылку и файлы, если они есть). Насколько они полезны для декомпозиции?
@@ -401,7 +409,7 @@ export async function handleCreateProject() {
             id: 'proj_' + Date.now(),
             title: customTitle,
             goal: goal,
-            link: link,
+            link: links.join(', '),
             files: state.attachedFilesData.map(f => f.name),
             source_evaluation: parsed.source_evaluation || [],
             tasks: parsed.tasks.map((t, i) => ({

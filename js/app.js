@@ -11,7 +11,13 @@ document.addEventListener('app:init', async () => {
     
     if (state.projects && state.projects.length > 0) {
         if (!state.currentProjectId) {
-            state.currentProjectId = state.projects[0].id;
+            let lastActive = null;
+            try { lastActive = localStorage.getItem('lastActiveProjectId'); } catch(e) {}
+            if (lastActive && state.projects.some(p => p.id === lastActive)) {
+                state.currentProjectId = lastActive;
+            } else {
+                state.currentProjectId = state.projects[0].id;
+            }
         }
         renderSidebar();
         renderKanban();
