@@ -272,6 +272,10 @@
     transition: all 0.2s ease;
 }
 
+.card-dark .subtask-item.done span {
+    color: var(--text-muted-light);
+}
+
 /* Break Down Button and Expand Button */
 .card-actions {
     display: flex;
