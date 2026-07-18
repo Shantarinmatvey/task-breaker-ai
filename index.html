@@ -183,17 +183,26 @@
                     </div>
                     
                     <div class="project-stats-widget">
+                        <div class="stats-overview">
+                            <div class="stat-box">
+                                <div class="stat-label"><span class="dot dot-todo"></span> К выполнению</div>
+                                <div class="stat-value" id="statTextTodo">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label"><span class="dot dot-inprogress"></span> В процессе</div>
+                                <div class="stat-value" id="statTextInProgress">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label"><span class="dot dot-done"></span> Готово</div>
+                                <div class="stat-value" id="statTextDone">0</div>
+                            </div>
+                        </div>
                         <div class="linear-progress-container">
                             <div class="linear-progress-bar">
                                 <div class="progress-segment segment-done" id="barDone" style="width: 0%"></div>
                                 <div class="progress-segment segment-inprogress" id="barInProgress" style="width: 0%"></div>
                                 <div class="progress-segment segment-todo" id="barTodo" style="width: 0%"></div>
                             </div>
-                        </div>
-                        <div class="stats-legend">
-                            <div class="legend-item"><span class="dot dot-todo"></span> К выполнению (<span id="statTextTodo">0</span>)</div>
-                            <div class="legend-item"><span class="dot dot-inprogress"></span> В процессе (<span id="statTextInProgress">0</span>)</div>
-                            <div class="legend-item"><span class="dot dot-done"></span> Готово (<span id="statTextDone">0</span>)</div>
                         </div>
                     </div>
                 </header>
