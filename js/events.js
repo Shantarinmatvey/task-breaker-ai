@@ -321,6 +321,15 @@ export function setupEventListeners() {
                 if(task) {
                     task.subtasks[subtaskId].done = target.checked;
                     saveState();
+                    
+                    const label = target.closest('label.subtask-item');
+                    if (label) {
+                        if (target.checked) {
+                            label.classList.add('done');
+                        } else {
+                            label.classList.remove('done');
+                        }
+                    }
                     // We DO NOT call renderKanban() here to prevent the card from jumping or re-rendering
                 }
             }

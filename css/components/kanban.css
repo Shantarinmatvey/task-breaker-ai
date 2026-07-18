@@ -252,8 +252,9 @@
 }
 
 .subtask-item.done span {
-    text-decoration: line-through;
+    color: var(--text-muted-dark);
     opacity: 0.6;
+    transition: all 0.2s ease;
 }
 
 /* Break Down Button and Expand Button */
